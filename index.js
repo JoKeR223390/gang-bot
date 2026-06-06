@@ -49,37 +49,61 @@ client.commands.set(temizleme.data.name, temizleme);
 client.once(Events.ClientReady, async () => {
   console.log(`${client.user.tag} aktif!`);
 
-  // BAŞVURU
-  const basvuruChannel = await client.channels.fetch(config.BASVURU_CHANNEL);
-  if (basvuruChannel) {
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId("basvuru")
-        .setLabel("Başvuru Yap")
-        .setStyle(ButtonStyle.Primary)
-    );
+// BAŞVURU
+const basvuruChannel = await client.channels.fetch(config.BASVURU_CHANNEL);
 
+if (basvuruChannel) {
+
+  const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("basvuru")
+      .setLabel("Başvuru Yap")
+      .setStyle(ButtonStyle.Primary)
+  );
+
+  const mesajlar = await basvuruChannel.messages.fetch({ limit: 20 });
+
+  const varMi = mesajlar.find(
+    m =>
+      m.author.id === client.user.id &&
+      m.content.includes("777 FAMILY BAŞVURU")
+  );
+
+  if (!varMi) {
     await basvuruChannel.send({
       content: "📢 777 FAMILY BAŞVURU @everyone",
       components: [row]
     });
   }
+}
 
-  // ŞİKAYET
-  const sikayetChannel = await client.channels.fetch(config.SIKAYET_CHANNEL);
-  if (sikayetChannel) {
-    const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId("sikayet")
-        .setLabel("Şikayet Et")
-        .setStyle(ButtonStyle.Danger)
-    );
+// ŞİKAYET
+const sikayetChannel = await client.channels.fetch(config.SIKAYET_CHANNEL);
 
+if (sikayetChannel) {
+
+  const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setCustomId("sikayet")
+      .setLabel("Şikayet Et")
+      .setStyle(ButtonStyle.Danger)
+  );
+
+  const mesajlar = await sikayetChannel.messages.fetch({ limit: 20 });
+
+  const varMi = mesajlar.find(
+    m =>
+      m.author.id === client.user.id &&
+      m.content.includes("777 FAMILY ŞİKAYET")
+  );
+
+  if (!varMi) {
     await sikayetChannel.send({
       content: "🚨 777 FAMILY ŞİKAYET @everyone",
       components: [row]
     });
   }
+}
 
   client.user.setPresence({
     activities: [{ name: "777 FAMILY", type: 0 }],
