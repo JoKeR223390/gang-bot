@@ -177,21 +177,26 @@ async execute(interaction, config, client){
 
 const id = interaction.options.getString("id");
 
-await interaction.guild.members.unban(id);
+try {
+await interaction.guild.bans.remove(id);
 
-await interaction.reply(
-`Ban kaldırıldı: ${id}`
-);
+await interaction.reply(`✅ Ban kaldırıldı: ${id}`);
 
 const log = await client.channels.fetch(config.MOD_LOG_CHANNEL);
-
 if(log){
-log.send(
-`♻️ ${interaction.user.tag} → ${id} unbanladı`
-);
+log.send(`♻️ ${interaction.user.tag} → ${id} unbanladı`);
+}
+
+} catch (err) {
+console.error(err);
+return interaction.reply({
+content: "❌ Bu ID banlı değil ya da geçersiz",
+ephemeral: true
+});
+}
+
 }
 }
-},
 
 /* ================= DUYURU ================= */
 {
